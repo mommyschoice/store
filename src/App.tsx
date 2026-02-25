@@ -5,6 +5,7 @@ import Masonry from 'react-masonry-css';
 import { motion, AnimatePresence } from 'motion/react';
 import { clsx, type ClassValue } from 'clsx';
 import { twMerge } from 'tailwind-merge';
+import { Analytics } from '@vercel/analytics/react';
 
 // --- UTILS ---
 function cn(...inputs: ClassValue[]) {
@@ -720,6 +721,7 @@ export default function App() {
         <Route path="/admin" element={<AdminLogin />} />
         <Route path="/admin/dashboard" element={<AdminDashboard />} />
       </Routes>
+      <Analytics />
     </BrowserRouter>
   );
 }
