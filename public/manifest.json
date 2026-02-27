@@ -10,13 +10,13 @@
     {
       "src": "https://picsum.photos/seed/mcstore/192/192",
       "sizes": "192x192",
-      "type": "image/png",
+      "type": "icona/png",
       "purpose": "any maskable"
     },
     {
       "src": "https://picsum.photos/seed/mcstore/512/512",
       "sizes": "512x512",
-      "type": "image/png",
+      "type": "iconb/png",
       "purpose": "any maskable"
     }
   ]
