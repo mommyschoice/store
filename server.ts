@@ -92,9 +92,10 @@ const authenticateToken = (req: any, res: any, next: any) => {
 };
 
 // --- API ROUTES ---
+const apiRouter = express.Router();
 
 // Public: Get all dresses
-app.get("/api/dresses", (req, res) => {
+apiRouter.get("/dresses", (req, res) => {
   try {
     const { category, search } = req.query;
     let query = "SELECT * FROM dresses";
@@ -124,13 +125,17 @@ app.get("/api/dresses", (req, res) => {
 });
 
 // Public: Get categories
-app.get("/api/categories", (req, res) => {
-  const categories = db.prepare("SELECT DISTINCT category FROM dresses").all();
-  res.json(["All", ...categories.map((c: any) => c.category)]);
+apiRouter.get("/categories", (req, res) => {
+  try {
+    const categories = db.prepare("SELECT DISTINCT category FROM dresses").all();
+    res.json(["All", ...categories.map((c: any) => c.category)]);
+  } catch (error: any) {
+    res.status(500).json({ error: "Failed to fetch categories" });
+  }
 });
 
 // Admin: Login
-app.post("/api/admin/login", (req, res) => {
+apiRouter.post("/admin/login", (req, res) => {
   try {
     const { username, password } = req.body;
     console.log(`Login attempt for username: ${username}`);
@@ -158,7 +163,7 @@ app.post("/api/admin/login", (req, res) => {
 });
 
 // Admin: Create Dress
-app.post("/api/admin/dresses", authenticateToken, upload.single("image"), (req, res) => {
+apiRouter.post("/admin/dresses", authenticateToken, upload.single("image"), (req, res) => {
   try {
     const { code, name, category, note, sizes } = req.body;
     const imageUrl = `/uploads/${req.file?.filename}`;
@@ -175,7 +180,7 @@ app.post("/api/admin/dresses", authenticateToken, upload.single("image"), (req, 
 });
 
 // Admin: Update Dress
-app.put("/api/admin/dresses/:id", authenticateToken, upload.single("image"), (req, res) => {
+apiRouter.put("/admin/dresses/:id", authenticateToken, upload.single("image"), (req, res) => {
   try {
     const { id } = req.params;
     const { code, name, category, note, sizes } = req.body;
@@ -199,21 +204,32 @@ app.put("/api/admin/dresses/:id", authenticateToken, upload.single("image"), (re
 });
 
 // Admin: Delete Dress
-app.delete("/api/admin/dresses/:id", authenticateToken, (req, res) => {
-  const { id } = req.params;
-  const dress: any = db.prepare("SELECT image_url FROM dresses WHERE id = ?").get(id);
-  
-  if (dress) {
-    const filePath = path.join(process.cwd(), dress.image_url);
-    if (fs.existsSync(filePath)) {
-      fs.unlinkSync(filePath);
+apiRouter.delete("/admin/dresses/:id", authenticateToken, (req, res) => {
+  try {
+    const { id } = req.params;
+    const dress: any = db.prepare("SELECT image_url FROM dresses WHERE id = ?").get(id);
+    
+    if (dress) {
+      const filePath = path.join(process.cwd(), dress.image_url);
+      if (fs.existsSync(filePath)) {
+        fs.unlinkSync(filePath);
+      }
+      db.prepare("DELETE FROM dresses WHERE id = ?").run(id);
+      res.json({ success: true });
+    } else {
+      res.status(404).json({ error: "Dress not found" });
     }
-    db.prepare("SELECT * FROM dresses WHERE id = ?").get(id); // Check if exists
-    db.prepare("DELETE FROM dresses WHERE id = ?").run(id);
-    res.json({ success: true });
-  } else {
-    res.status(404).json({ error: "Dress not found" });
+  } catch (error: any) {
+    res.status(500).json({ error: error.message });
   }
+});
+
+// Mount API routes
+app.use("/api", apiRouter);
+
+// API 404 Handler - Prevents falling through to SPA middleware for missing API routes
+app.use("/api/*", (req, res) => {
+  res.status(404).json({ error: `API route not found: ${req.originalUrl}` });
 });
 
 // --- VITE MIDDLEWARE ---
