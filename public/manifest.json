@@ -10,13 +10,13 @@
     {
       "src": "icona/png",
       "sizes": "192x192",
-      "type": "icona/png",
+      "type": "image/png",
       "purpose": "any maskable"
     },
     {
       "src": "icona/png",
       "sizes": "512x512",
-      "type": "iconb/png",
+      "type": "image/png",
       "purpose": "any maskable"
     }
   ]
