@@ -3,8 +3,18 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Yuki Dress Gallery</title>
+    <title>MC STORE</title>
+    <link rel="manifest" href="/manifest.json" />
+    <meta name="theme-color" content="#7ec400" />
+    <link rel="apple-touch-icon" href="https://picsum.photos/seed/mcstore/192/192" />
     <script>
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+          navigator.serviceWorker.register('/sw.js')
+            .then(reg => console.log('SW registered', reg))
+            .catch(err => console.log('SW error', err));
+        });
+      }
       // Suppress benign Vite WebSocket connection errors
       window.addEventListener('unhandledrejection', function(event) {
         if (event.reason && (event.reason.message || '').includes('WebSocket')) {
