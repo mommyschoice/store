@@ -8,13 +8,13 @@
   "theme_color": "#7ec400",
   "icons": [
     {
-      "src": "https://picsum.photos/seed/mcstore/192/192",
+      "src": "icona/png",
       "sizes": "192x192",
       "type": "icona/png",
       "purpose": "any maskable"
     },
     {
-      "src": "https://picsum.photos/seed/mcstore/512/512",
+      "src": "icona/png",
       "sizes": "512x512",
       "type": "iconb/png",
       "purpose": "any maskable"
