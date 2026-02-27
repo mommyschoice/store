@@ -1,0 +1,23 @@
+{
+  "name": "MC Store",
+  "short_name": "MC Store",
+  "description": "Mommy's Choice Western Boutique Catalog",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#7ec400",
+  "icons": [
+    {
+      "src": "https://picsum.photos/seed/mcstore/192/192",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "https://picsum.photos/seed/mcstore/512/512",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
